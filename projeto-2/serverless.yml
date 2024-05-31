@@ -30,6 +30,12 @@ provider:
 functions:
   envio-email:
     handler: handler.envio_email
+    events:
+      - s3:
+          bucket: ${self:custom.bucketName}
+          event: s3:ObjectCreated:Put
+          rules:
+            - suffix: .csv
 
 custom:
   bucketName: send-email-ses-projeto2
