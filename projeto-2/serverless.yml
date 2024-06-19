@@ -46,3 +46,10 @@ custom:
 
 plugins:
   - serverless-s3-cleaner
+
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!env/**'
+    - '!*.csv'
+    - '!*.json'

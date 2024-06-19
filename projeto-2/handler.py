@@ -1,15 +1,18 @@
 import json
+
 import boto3
 
-sessao = boto3.Session(profile_name='automacao-curso', region_name='us-east-1')
+sessao = boto3.Session()
 cliente_s3 = sessao.client('s3')
 cliente_ses = sessao.client('ses')
 
 
 def envio_email(event, context):
+    print(event)
+
     resultado = cliente_s3.get_object(
-        Bucket='send-email-ses-projeto2',
-        Key='usuarios.csv'
+        Bucket=event['Records'][0]['s3']['bucket']['name'],
+        Key=event['Records'][0]['s3']['object']['key']
     )
 
     dados = resultado['Body'].readlines()
@@ -20,7 +23,6 @@ def envio_email(event, context):
         usuario = linha.split(',')
         print(usuario)
         enviar_email(usuario[0], usuario[1])
-        break
 
     body = {
         "message": "Go Serverless v3.0! Your function executed successfully!",
@@ -53,6 +55,3 @@ def enviar_email(nome, email):
             }
         }
     )
-
-
-envio_email({}, {})
